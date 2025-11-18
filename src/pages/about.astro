@@ -1,0 +1,35 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+let users = [];
+try {
+    const response = await fetch('https://randomuser.me/api/?results=10');
+    const data = await response.json();
+    users = data.results;
+} catch (err) {
+    console.error('Error fetching user data:', err);
+}
+---
+
+<Layout title="About">
+    <div class="mb-8 text-center">
+        <h1 class="text-3xl font-bold underline">About Us</h1>
+        <p class="text-lg">This is the about page of our Astro site.</p>
+    </div>
+    
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {users.map((user: any) => (
+            <div>
+                <div>
+                    <img src={user.picture.medium} alt={`${user.name.first} ${user.name.last}`} />
+                    <h2>Name: {user.name.first} {user.name.last}</h2>
+                </div>
+                <div>
+                    <div><strong>Email:</strong> {user.email}</div>
+                    <div><strong>Gender:</strong> {user.gender}</div>
+                    <div><strong>City:</strong> {user.location.city}</div>
+                </div>
+            </div>
+        ))}
+    </div>
+</Layout>
